@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Punto Aqua</string>
+    <string name="username_input_login">Usuario</string>
+    <string name="userpassword_input_login">Contraseña</string>
+    <string name="button_input_login_text">Iniciar sesión</string>
+    <string name="points_label">Puntos</string>
+    <string name="clientid_label">Numero de cliente</string>
+    <string name="client_search_button">Buscar</string>
+    <string name="client_label">Cliente</string>
+    <string name="id_label">ID</string>
+    <string name="fname_label">Nombres</string>
+    <string name="lname_label">Apellidos</string>
+    <string name="points_user">Puntos</string>
+    <string name="file_token">auth_token</string>
+</resources>
