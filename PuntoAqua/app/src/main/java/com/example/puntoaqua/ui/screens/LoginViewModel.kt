@@ -10,21 +10,28 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.puntoaqua.PuntoAquaApplication
+import com.example.puntoaqua.repositories.LocalRepository
 import com.example.puntoaqua.repositories.UserDbRepository
 import com.example.puntoaqua.ui.PuntoAquaUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
-class LoginViewModel(private val userDbRepository: UserDbRepository) : ViewModel() {
+class LoginViewModel(
+    private val userDbRepository: UserDbRepository,
+    private val userPreferencesRepository: LocalRepository
+) : ViewModel() {
 
     var username by mutableStateOf("")
     var userpassword by mutableStateOf("")
 
     val _uiState = MutableStateFlow(PuntoAquaUiState())
     val uiState: StateFlow<PuntoAquaUiState> = _uiState.asStateFlow()
+
+
+    var tokenUiState: String = ""
 
     fun updateUserName(user: String) {
         username = user
@@ -36,23 +43,35 @@ class LoginViewModel(private val userDbRepository: UserDbRepository) : ViewModel
 
     fun submitLogin() {
         viewModelScope.launch {
-            userDbRepository.login(username, userpassword)
-            username = ""
-            userpassword = ""
+            val token = userDbRepository.login(username, userpassword)
+
+            userPreferencesRepository.saveToken(token)
+            userPreferencesRepository.token.collect { it ->
+                tokenUiState = it
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        isUserLogged = true,
+                        token = tokenUiState
+                    )
+                }
+            }
         }
+        username = ""
+        userpassword = ""
     }
 
     fun logout() {
     }
 
     companion object {
-        val factory : ViewModelProvider.Factory =
-        viewModelFactory {
-              initializer {
-                  val application = (this[APPLICATION_KEY] as PuntoAquaApplication)
-                  val userDbRepository = application.container.userDbRepository
-                  LoginViewModel(userDbRepository)
-              }
-        }
+        val factory: ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    val application = (this[APPLICATION_KEY] as PuntoAquaApplication)
+                    val userDbRepository = application.container.userDbRepository
+                    val userPreferencesRepository = application.localRepository
+                    LoginViewModel(userDbRepository, userPreferencesRepository)
+                }
+            }
     }
 }

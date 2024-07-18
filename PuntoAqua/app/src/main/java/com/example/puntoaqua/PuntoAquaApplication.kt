@@ -21,7 +21,7 @@ class PuntoAquaApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         localRepository = LocalRepository(userInfo)
-        container = AppDataContainer(this)
+        container = AppDataContainer()
     }
 
 }

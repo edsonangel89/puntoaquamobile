@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 
 interface UserDbRepository {
 
-    suspend fun login(userName: String, password: String): Json
+    suspend fun login(userName: String, password: String): String
 
     suspend fun logout(): Json
 
@@ -15,7 +15,7 @@ interface UserDbRepository {
 
 class UserDbRepositoryImpl(private val userApiService: UserApiService) : UserDbRepository {
 
-    override suspend fun login(userName: String, password: String) = userApiService.login(userName,password)
+    override suspend fun login(userName: String, password: String): String = userApiService.login(userName,password)
 
     override suspend fun logout() = userApiService.logout()
 

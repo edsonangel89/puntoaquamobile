@@ -29,7 +29,8 @@ fun PuntoAquaApp(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
-    val appUiState by appViewModelProvider.appUiState.collectAsState()
+    val appUiState by userViewModel.uiState.collectAsState()
+
     NavHost(
         navController = navController,
         startDestination = "home"

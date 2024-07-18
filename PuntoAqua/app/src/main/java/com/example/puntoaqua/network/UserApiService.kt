@@ -10,7 +10,8 @@ import kotlinx.serialization.json.Json
 
 class UserApiService {
 
-    suspend fun login(username: String, password: String) : Json {
+    private var token: String = ""
+    suspend fun login(username: String, password: String) : String {
         val client = HttpClient(OkHttp)
         try {
             val response: HttpResponse = client.submitForm(
@@ -20,20 +21,17 @@ class UserApiService {
                     append("password", password)
                 }
             )
-            response.headers.getAll("set-cookie")?.get(1)?.let { Log.d("DEBUG", it) }
-            if (response.headers.getAll("set-cookie")?.get(1)
-                    ?.contains("Authorization") == true
-            ) {
-
-            } else {
-
+            response.headers.getAll("set-cookie")?.get(1)?.let { it ->
+                token = it.substringBefore(";").substringAfter("=")
+                /*Log.d("EMITTER", token)*/
             }
+
         } catch (e: Exception) {
 
         } finally {
             client.close()
         }
-        return Json.Default
+        return token
     }
 
 

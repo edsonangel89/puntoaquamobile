@@ -9,10 +9,10 @@ interface AppContainer {
     val userDbRepository: UserDbRepository
 }
 
-class AppDataContainer(private val userApiService: UserApiService) : AppContainer {
+class AppDataContainer() : AppContainer {
 
     override val userDbRepository: UserDbRepository by lazy {
-        UserDbRepositoryImpl(userApiService)
+        UserDbRepositoryImpl(UserApiService())
     }
 
 }

@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 data class PuntoAquaUiState(
-    val isUserLogged: Boolean = false
+    val isUserLogged: Boolean = false,
+    val token: String = ""
 )
 
 sealed interface AquaUiState {
@@ -22,11 +23,13 @@ sealed interface AquaUiState {
 
 class ViewModelProvider : ViewModel() {
 
-    val _appUiState = MutableStateFlow(PuntoAquaUiState())
+    /*val _appUiState = MutableStateFlow(PuntoAquaUiState())
     val appUiState: StateFlow<PuntoAquaUiState> = _appUiState.asStateFlow()
-
+*/
     var aquaUiState: AquaUiState by mutableStateOf(AquaUiState.Unlogged)
         private set
+
+
 
 }
 
