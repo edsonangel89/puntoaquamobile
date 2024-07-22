@@ -40,7 +40,7 @@ fun PuntoAquaApp(
                 PointsScreen(
                     textValue = pointsViewModel.pointsCounter,
                     valueChange =  { pointsViewModel.updatePointsCounter(it) },
-                    logout = { userViewModel.logout() },
+                    logout = { userViewModel.logout(appUiState.userId) },
                     keyboardOptions = KeyboardOptions.Default.copy(
                        keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next
@@ -65,7 +65,7 @@ fun PuntoAquaApp(
                 valueText = userDetailViewModel.userId,
                 onChangeValue = { userDetailViewModel.updateId(it) },
                 logout = {
-                    userViewModel.logout()
+                    userViewModel.logout(appUiState.userId)
                     navController.navigate("home")
                  },
                 keyboardOptions = KeyboardOptions.Default.copy(

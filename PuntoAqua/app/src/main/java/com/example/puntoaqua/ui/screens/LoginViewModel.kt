@@ -30,6 +30,7 @@ class LoginViewModel(
     val _uiState = MutableStateFlow(PuntoAquaUiState())
     val uiState: StateFlow<PuntoAquaUiState> = _uiState.asStateFlow()
 
+    val userId by mutableStateOf(_uiState.value.userId)
 
     var tokenUiState: String = ""
 
@@ -60,7 +61,22 @@ class LoginViewModel(
         userpassword = ""
     }
 
-    fun logout() {
+    fun logout(uid: String) {
+        viewModelScope.launch {
+            try {
+                val logout = userDbRepository.logout(uid)
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        isUserLogged = false,
+                        userId = "",
+                        username = "",
+                        token = ""
+                    )
+                }
+            } catch (e: Exception) {
+
+            }
+        }
     }
 
     companion object {

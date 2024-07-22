@@ -7,7 +7,7 @@ interface UserDbRepository {
 
     suspend fun login(userName: String, password: String): String
 
-    suspend fun logout(): Json
+    suspend fun logout(uid: String)
 
     suspend fun signUp(fName: String, lName: String, email: String, password: String): Json
 
@@ -17,7 +17,7 @@ class UserDbRepositoryImpl(private val userApiService: UserApiService) : UserDbR
 
     override suspend fun login(userName: String, password: String): String = userApiService.login(userName,password)
 
-    override suspend fun logout() = userApiService.logout()
+    override suspend fun logout(uid: String) = userApiService.logout(uid)
 
     override suspend fun signUp(fName: String, lName: String, email: String, password: String) =
         userApiService.signUp(fName,lName,email,password)
