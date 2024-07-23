@@ -2,6 +2,7 @@ package com.example.puntoaqua.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,28 +20,28 @@ import com.example.puntoaqua.ui.screens.PointsScreen
 import com.example.puntoaqua.ui.screens.PointsViewModel
 import com.example.puntoaqua.ui.screens.UserDetailScreen
 import com.example.puntoaqua.ui.screens.UserDetailViewModel
+import io.ktor.websocket.Frame
 
 @Composable
 fun PuntoAquaApp(
-    appViewModelProvider: ViewModelProvider = viewModel(),
+    appViewModelProvider: PuntoAquaViewModel = viewModel(factory = PuntoAquaViewModel.factory),
     userViewModel: LoginViewModel = viewModel(factory = LoginViewModel.factory),
     pointsViewModel: PointsViewModel = viewModel(),
     userDetailViewModel: UserDetailViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
-    val appUiState by userViewModel.uiState.collectAsState()
-
+    val userState = appViewModelProvider.userState.collectAsState(PuntoAquaUiState()).value
     NavHost(
         navController = navController,
         startDestination = "home"
     ) {
         composable(route = "home") {
-            if(appUiState.isUserLogged) {
+            if(userState.isUserLogged) {
                 PointsScreen(
                     textValue = pointsViewModel.pointsCounter,
                     valueChange =  { pointsViewModel.updatePointsCounter(it) },
-                    logout = { userViewModel.logout(appUiState.userId) },
+                    logout = { userViewModel.logout(userState.userId) },
                     keyboardOptions = KeyboardOptions.Default.copy(
                        keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next
@@ -65,7 +66,7 @@ fun PuntoAquaApp(
                 valueText = userDetailViewModel.userId,
                 onChangeValue = { userDetailViewModel.updateId(it) },
                 logout = {
-                    userViewModel.logout(appUiState.userId)
+                    userViewModel.logout(userState.userId)
                     navController.navigate("home")
                  },
                 keyboardOptions = KeyboardOptions.Default.copy(

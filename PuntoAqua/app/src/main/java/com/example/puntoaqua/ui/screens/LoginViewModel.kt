@@ -1,8 +1,12 @@
 package com.example.puntoaqua.ui.screens
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -45,8 +49,8 @@ class LoginViewModel(
     fun submitLogin() {
         viewModelScope.launch {
             val token = userDbRepository.login(username, userpassword)
-
             userPreferencesRepository.saveToken(token)
+            userPreferencesRepository.saveLoginState(true)
             userPreferencesRepository.token.collect { it ->
                 tokenUiState = it
                 _uiState.update { currentState ->
@@ -65,6 +69,7 @@ class LoginViewModel(
         viewModelScope.launch {
             try {
                 val logout = userDbRepository.logout(uid)
+                userPreferencesRepository.saveLoginState(false)
                 _uiState.update { currentState ->
                     currentState.copy(
                         isUserLogged = false,
@@ -90,4 +95,5 @@ class LoginViewModel(
                 }
             }
     }
+
 }
