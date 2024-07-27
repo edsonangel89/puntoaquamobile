@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.puntoaqua.R
 import com.example.puntoaqua.ui.theme.PuntoAquaTheme
-import com.example.puntoaqua.data.UserExample
 
 @Composable
 fun UserDetailScreen(
@@ -42,9 +41,9 @@ fun UserDetailScreen(
     onChangeValue: (String) -> Unit,
     logout: () -> Unit,
     getUserFun: () -> Unit,
-    keyboardOptions: KeyboardOptions
+    keyboardOptions: KeyboardOptions,
+    user: UserDetailsInfoState
 ) {
-    val test = false
     Scaffold(
         topBar = {
             UserTopBar(
@@ -63,9 +62,9 @@ fun UserDetailScreen(
                 modifier = Modifier
                     .padding(PaddingValues)
             )
-            if(test) {
-                UserInfo()
-            }
+            UserInfo(
+                userInfo = user
+            )
         }
     }
 }
@@ -184,7 +183,9 @@ fun UserButtonItem(
 }
 
 @Composable
-fun UserInfo() {
+fun UserInfo(
+    userInfo: UserDetailsInfoState
+) {
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -204,7 +205,7 @@ fun UserInfo() {
                     .fillMaxWidth(0.3f)
             )
             Text(
-                text = UserExample.id.toString(),
+                text = userInfo.userId,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -224,7 +225,7 @@ fun UserInfo() {
                     .padding(16.dp)
                     .fillMaxWidth(0.3f)
             )
-            Text(text = UserExample.firstName,
+            Text(text = userInfo.fName,
                 textAlign = TextAlign.Center,
                 fontSize = 18.sp,
                 modifier = Modifier
@@ -243,7 +244,7 @@ fun UserInfo() {
                     .padding(16.dp)
                     .fillMaxWidth(0.3f)
             )
-            Text(text = UserExample.lastName,
+            Text(text = userInfo.lName,
                 textAlign = TextAlign.Center,
                 fontSize = 18.sp,
                 modifier = Modifier
@@ -262,7 +263,7 @@ fun UserInfo() {
                     .padding(16.dp)
                     .fillMaxWidth(0.3f)
                 )
-            Text(text = UserExample.points.toString(),
+            Text(text = userInfo.clientPoints,
                 textAlign = TextAlign.Center,
                 fontSize = 18.sp,
                 modifier = Modifier

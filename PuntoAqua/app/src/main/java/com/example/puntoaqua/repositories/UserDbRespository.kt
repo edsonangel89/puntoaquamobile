@@ -1,7 +1,6 @@
 package com.example.puntoaqua.repositories
 
 import com.example.puntoaqua.network.UserApiService
-import kotlinx.serialization.json.Json
 
 interface UserDbRepository {
 
@@ -9,17 +8,20 @@ interface UserDbRepository {
 
     suspend fun logout(uid: String)
 
-    suspend fun signUp(fName: String, lName: String, email: String, password: String): Json
+    suspend fun getUserInfo(uid: String): String
+
+    suspend fun updatePoints(uid: String, points: String): String
 
 }
 
 class UserDbRepositoryImpl(private val userApiService: UserApiService) : UserDbRepository {
 
-    override suspend fun login(userName: String, password: String): String = userApiService.login(userName,password)
+    override suspend fun login(userName: String, password: String) = userApiService.login(userName,password)
 
     override suspend fun logout(uid: String) = userApiService.logout(uid)
 
-    override suspend fun signUp(fName: String, lName: String, email: String, password: String) =
-        userApiService.signUp(fName,lName,email,password)
+    override suspend fun getUserInfo(uid: String) = userApiService.getUserInfo(uid)
+
+    override suspend fun updatePoints(uid: String, points: String) = userApiService.updatePoints(uid, points)
 
 }

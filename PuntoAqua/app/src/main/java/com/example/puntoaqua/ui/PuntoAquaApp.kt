@@ -2,10 +2,8 @@ package com.example.puntoaqua.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -20,18 +18,21 @@ import com.example.puntoaqua.ui.screens.PointsScreen
 import com.example.puntoaqua.ui.screens.PointsViewModel
 import com.example.puntoaqua.ui.screens.UserDetailScreen
 import com.example.puntoaqua.ui.screens.UserDetailViewModel
-import io.ktor.websocket.Frame
 
 @Composable
 fun PuntoAquaApp(
     appViewModelProvider: PuntoAquaViewModel = viewModel(factory = PuntoAquaViewModel.factory),
-    userViewModel: LoginViewModel = viewModel(factory = LoginViewModel.factory),
-    pointsViewModel: PointsViewModel = viewModel(),
-    userDetailViewModel: UserDetailViewModel = viewModel(),
+    userViewModel: LoginViewModel = viewModel(factory = PuntoAquaViewModel.factory),
+    pointsViewModel: PointsViewModel = viewModel(factory = PuntoAquaViewModel.factory),
+    userDetailViewModel: UserDetailViewModel = viewModel(factory = PuntoAquaViewModel.factory),
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
-    val userState = appViewModelProvider.userState.collectAsState(PuntoAquaUiState()).value
+    val test = appViewModelProvider.userState.collectAsState("").value
+    appViewModelProvider.userToken.collectAsState("").value
+    val userState = appViewModelProvider.uiState.collectAsState().value
+    val userInfo = userDetailViewModel.userDetailsState.collectAsState().value
+
     NavHost(
         navController = navController,
         startDestination = "home"
@@ -39,6 +40,8 @@ fun PuntoAquaApp(
         composable(route = "home") {
             if(userState.isUserLogged) {
                 PointsScreen(
+                    idValue = pointsViewModel.uid,
+                    idChange = { pointsViewModel.updateIdTextField(it) },
                     textValue = pointsViewModel.pointsCounter,
                     valueChange =  { pointsViewModel.updatePointsCounter(it) },
                     logout = { userViewModel.logout(userState.userId) },
@@ -46,7 +49,8 @@ fun PuntoAquaApp(
                        keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next
                     ),
-                    navigateToUserDetails = { navController.navigate("userdetail") }
+                    navigateToUserDetails = { navController.navigate("userdetail") },
+                    updatePoints =  { pointsViewModel.updatePoints(pointsViewModel.uid, pointsViewModel.pointsCounter) }
                 )
             }
             else {
@@ -74,7 +78,8 @@ fun PuntoAquaApp(
                     imeAction = ImeAction.Next
                 ),
                 getUserFun = { userDetailViewModel.getUser(userDetailViewModel.userId) },
-                navigateToPoints = { navController.navigate("home") }
+                navigateToPoints = { navController.navigate("home") },
+                user = userInfo
             )
         }
     }

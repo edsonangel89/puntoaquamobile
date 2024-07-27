@@ -34,11 +34,14 @@ import com.example.puntoaqua.ui.theme.PuntoAquaTheme
 
 @Composable
 fun PointsScreen(
+    idValue: String,
+    idChange: (String) -> Unit,
     textValue: String,
     valueChange: (String) -> Unit,
     navigateToUserDetails: () -> Unit,
     logout: () -> Unit,
     keyboardOptions: KeyboardOptions,
+    updatePoints: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -55,10 +58,14 @@ fun PointsScreen(
     )
     {paddingValues ->
           PointsInput(
+              labelId = R.string.id_label,
+              valueIdField = idValue,
+              onValueIdChange = idChange,
               labelInput = R.string.points_label,
               valueTextField = textValue,
               onValueChange = valueChange,
               keyboardOptions = keyboardOptions,
+              updatePoints = updatePoints,
               modifier = Modifier
                   .padding(paddingValues)
           )
@@ -100,10 +107,14 @@ fun PointsTapBar(
 
 @Composable
 fun PointsInput(
+    @StringRes labelId: Int,
+    valueIdField: String,
+    onValueIdChange: (String) -> Unit,
     @StringRes labelInput: Int,
     valueTextField: String,
     onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions,
+    updatePoints: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column (
@@ -115,6 +126,19 @@ fun PointsInput(
                 top = 100.dp
             )
     ){
+        Text(
+            text = stringResource(labelId),
+            fontSize = 36.sp,
+            modifier = Modifier
+                .padding(
+                    bottom = 8.dp
+                )
+        )
+        OutlinedTextField(
+            value = valueIdField,
+            onValueChange = onValueIdChange,
+            keyboardOptions = keyboardOptions
+        )
         Text(
             text = stringResource(labelInput),
             fontSize = 36.sp,
@@ -128,19 +152,23 @@ fun PointsInput(
             onValueChange = onValueChange,
             keyboardOptions = keyboardOptions
         )
-        ButtonItem()
+        ButtonItem(
+            updatePoints = updatePoints
+        )
     }
 }
 
 @Composable
-fun ButtonItem() {
+fun ButtonItem(
+    updatePoints: () -> Unit
+) {
     Button(
         modifier = Modifier
             .padding(
                 top = 16.dp
             )
             .fillMaxWidth(0.9f),
-        onClick = { /*TODO*/ }
+        onClick = updatePoints
     ) {
          Text(
              text = "Agregar",
