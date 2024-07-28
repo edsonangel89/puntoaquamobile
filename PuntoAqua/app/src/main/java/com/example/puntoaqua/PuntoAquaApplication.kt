@@ -2,13 +2,11 @@ package com.example.puntoaqua
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.puntoaqua.data.AppDataContainer
 import com.example.puntoaqua.repositories.LocalRepository
-import com.example.puntoaqua.ui.screens.UserDetailsInfoState
 
 private val Context.userInfo: DataStore<Preferences> by preferencesDataStore(
     name = "USER_INFO"

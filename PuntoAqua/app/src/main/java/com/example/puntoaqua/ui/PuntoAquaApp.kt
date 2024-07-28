@@ -2,8 +2,12 @@ package com.example.puntoaqua.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,10 +32,13 @@ fun PuntoAquaApp(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
-    val test = appViewModelProvider.userState.collectAsState("").value
+    appViewModelProvider.userState.collectAsState("").value
     appViewModelProvider.userToken.collectAsState("").value
     val userState = appViewModelProvider.uiState.collectAsState().value
     val userInfo = userDetailViewModel.userDetailsState.collectAsState().value
+    val loginState = remember { userViewModel.errorLogin }
+    val promoState = remember { pointsViewModel.promoState }
+    val userExist = remember { userDetailViewModel.userExist }
 
     NavHost(
         navController = navController,
@@ -39,6 +46,23 @@ fun PuntoAquaApp(
     ) {
         composable(route = "home") {
             if(userState.isUserLogged) {
+                when {
+                    promoState.value -> {
+                        AlertDialog(
+                            text = { Text(text = "PROMOCION") },
+                            onDismissRequest = { },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        promoState.value = false
+                                    }
+                                ) {
+                                    Text(text = "Confirmar")
+                                }
+                            }
+                        )
+                    }
+                }
                 PointsScreen(
                     idValue = pointsViewModel.uid,
                     idChange = { pointsViewModel.updateIdTextField(it) },
@@ -46,7 +70,7 @@ fun PuntoAquaApp(
                     valueChange =  { pointsViewModel.updatePointsCounter(it) },
                     logout = { userViewModel.logout(userState.userId) },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                       keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next
                     ),
                     navigateToUserDetails = { navController.navigate("userdetail") },
@@ -54,6 +78,23 @@ fun PuntoAquaApp(
                 )
             }
             else {
+                when {
+                    loginState.value -> {
+                        AlertDialog(
+                            text = { Text(text = "Usuario y/o contrasena incorrectos") },
+                            onDismissRequest = { },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        loginState.value = false
+                                    }
+                                ) {
+                                    Text(text = "Confirmar")
+                                }
+                            }
+                        )
+                    }
+                }
                 Login(
                     username = userViewModel.username,
                     onUserNameChange = { userViewModel.updateUserName(it) },
@@ -66,6 +107,23 @@ fun PuntoAquaApp(
             }
         }
         composable(route = "userdetail") {
+            when {
+                userExist.value -> {
+                    AlertDialog(
+                        text = { Text(text = "Usuario no encontrado") },
+                        onDismissRequest = { },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    userExist.value = false
+                                }
+                            ) {
+                                Text(text = "Confirmar")
+                            }
+                        }
+                    )
+                }
+            }
             UserDetailScreen(
                 valueText = userDetailViewModel.userId,
                 onChangeValue = { userDetailViewModel.updateId(it) },

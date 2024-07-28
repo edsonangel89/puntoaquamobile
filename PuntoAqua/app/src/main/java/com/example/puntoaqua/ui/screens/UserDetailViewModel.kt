@@ -8,20 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.puntoaqua.data.PuntoAquaUiState
 import com.example.puntoaqua.repositories.UserDbRepository
 import com.example.puntoaqua.repositories.UserStateRepository
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.HttpHeaders
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import java.io.IOException
 
 data class UserDetailsInfoState(
     val userId: String = "",
@@ -41,6 +33,8 @@ class UserDetailViewModel(
 
     var _userDetailsState = MutableStateFlow(UserDetailsInfoState())
     var userDetailsState: StateFlow<UserDetailsInfoState> = _userDetailsState.asStateFlow()
+
+    val userExist = mutableStateOf(false)
 
     fun updateId(uId: String) {
         userId = uId
@@ -64,7 +58,15 @@ class UserDetailViewModel(
                     )
                 }
             } catch (e: Exception) {
-
+                 userExist.value = true
+                _userDetailsState.update { currentState ->
+                    currentState.copy(
+                        userId = "",
+                        fName = "",
+                        lName = "",
+                        clientPoints = "0"
+                    )
+                }
             }
             userId = ""
         }

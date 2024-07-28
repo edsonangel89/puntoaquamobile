@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.puntoaqua.PuntoAquaApplication
 import com.example.puntoaqua.data.PuntoAquaUiState
 import com.example.puntoaqua.repositories.LocalRepository
-import com.example.puntoaqua.repositories.UserDbRepository
 import com.example.puntoaqua.repositories.UserStateRepository
 import com.example.puntoaqua.ui.screens.LoginViewModel
 import com.example.puntoaqua.ui.screens.PointsViewModel
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 class PuntoAquaViewModel(
-    private val userDbRepository: UserDbRepository,
     private val userPreferencesRepository: LocalRepository
 ) : ViewModel() {
 
@@ -46,9 +44,8 @@ class PuntoAquaViewModel(
             viewModelFactory {
                 initializer {
                     val application = (this[APPLICATION_KEY] as PuntoAquaApplication)
-                    val userDbRepository = application.container.userDbRepository
                     val userPreferencesRepository = application.localRepository
-                    PuntoAquaViewModel(userDbRepository, userPreferencesRepository)
+                    PuntoAquaViewModel(userPreferencesRepository)
                 }
                 initializer {
                     val application = (this[APPLICATION_KEY] as PuntoAquaApplication)

@@ -23,6 +23,8 @@ class LoginViewModel(
 
     val uiState: StateFlow<PuntoAquaUiState> = UserStateRepository.uiState
 
+    var errorLogin = mutableStateOf(false)
+
     fun updateUserName(user: String) {
         username = user
     }
@@ -36,7 +38,11 @@ class LoginViewModel(
             try {
                 val userJson = userDbRepository.login(username, userpassword)
 
-                /*CHECK THE RESPONSE MESSAGE, AND BASED ON CONTENT REDIRECT OR SHOW A VIEW*/
+                when(userJson) {
+                    "Non-user" -> throw Exception("Non-user")
+                    "Wrong-password" -> throw Exception("Wrong-password")
+                    "Non-verified" -> throw Exception("Non-verified")
+                }
 
                 val user = Json.decodeFromString<Map<String,String?>>(userJson)
                 val uid = user.get("UserID") ?: ""
@@ -57,7 +63,7 @@ class LoginViewModel(
                     token = token
                 )
             } catch (e: Exception) {
-
+                errorLogin.value = true
             }
             username = ""
             userpassword = ""

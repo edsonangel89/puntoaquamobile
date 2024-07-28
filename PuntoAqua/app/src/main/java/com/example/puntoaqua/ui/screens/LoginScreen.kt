@@ -22,10 +22,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.puntoaqua.R
 import com.example.puntoaqua.ui.theme.PuntoAquaTheme
-import kotlinx.coroutines.coroutineScope
 
 /*
 @Composable
