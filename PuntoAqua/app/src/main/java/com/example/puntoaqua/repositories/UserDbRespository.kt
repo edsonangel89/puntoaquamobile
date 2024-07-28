@@ -12,6 +12,8 @@ interface UserDbRepository {
 
     suspend fun updatePoints(uid: String, points: String): String
 
+    suspend fun getUser(uid: String): String
+
 }
 
 class UserDbRepositoryImpl(private val userApiService: UserApiService) : UserDbRepository {
@@ -23,5 +25,7 @@ class UserDbRepositoryImpl(private val userApiService: UserApiService) : UserDbR
     override suspend fun getUserInfo(uid: String) = userApiService.getUserInfo(uid)
 
     override suspend fun updatePoints(uid: String, points: String) = userApiService.updatePoints(uid, points)
+
+    override suspend fun getUser(uid: String): String = userApiService.user(uid)
 
 }

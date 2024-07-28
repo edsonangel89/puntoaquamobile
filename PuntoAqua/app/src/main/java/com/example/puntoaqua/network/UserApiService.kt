@@ -10,11 +10,13 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpHeaders
 import io.ktor.http.parameters
 import kotlinx.coroutines.flow.update
+import java.io.IOException
 
 
 class UserApiService {
@@ -108,6 +110,23 @@ class UserApiService {
             client.close()
         }
         return responseJson
+    }
+
+    suspend fun user(userId: String): String {
+        val client = HttpClient(OkHttp)
+        var body: String = ""
+        try {
+            val url = "https://www.puntoaqua.com/api/users/get/${userId}"
+            val response: HttpResponse = client.get(urlString = url) {
+                header(HttpHeaders.Authorization, "Bearer ${UserStateRepository.getToken()}")
+            }
+            body = response.body<String>()
+        } catch (e: IOException) {
+
+        } finally {
+            client.close()
+        }
+        return body
     }
 
 }

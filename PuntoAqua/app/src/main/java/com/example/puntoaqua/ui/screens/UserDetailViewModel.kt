@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.puntoaqua.data.PuntoAquaUiState
+import com.example.puntoaqua.repositories.UserDbRepository
 import com.example.puntoaqua.repositories.UserStateRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -30,10 +31,10 @@ data class UserDetailsInfoState(
 )
 
 class UserDetailViewModel(
+    private val userDbRepository: UserDbRepository
 ) : ViewModel() {
 
     var userId by mutableStateOf("")
-    var body: String = ""
     var userInfo: String = ""
 
     var uiState: StateFlow<PuntoAquaUiState> = UserStateRepository.uiState
@@ -48,7 +49,7 @@ class UserDetailViewModel(
     fun getUser(uId: String) {
         viewModelScope.launch {
             try {
-                userInfo = user(uId)
+                userInfo = userDbRepository.getUser(uId)
                 val decUser = Json.decodeFromString<Map<String,String?>>(userInfo)
                 val userId = decUser.get("UserID") ?: ""
                 val fName = decUser.get("FirstName") ?: ""
@@ -69,19 +70,4 @@ class UserDetailViewModel(
         }
     }
 
-    suspend fun user(user: String): String {
-        val client = HttpClient(OkHttp)
-        try {
-            val url = "https://www.puntoaqua.com/api/users/get/${userId}"
-            val response: HttpResponse = client.get(urlString = url) {
-                header(HttpHeaders.Authorization, "Bearer ${UserStateRepository.getToken()}")
-            }
-            body = response.body<String>()
-        } catch (e: IOException) {
-
-        } finally {
-            client.close()
-        }
-        return body
-    }
 }
