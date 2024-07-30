@@ -51,7 +51,6 @@ android {
     }
 }
 
-val ktor_version: String by project
 
 dependencies {
 
@@ -63,22 +62,20 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-cio:$ktor_version")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
-    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
-    implementation("androidx.navigation:navigation-compose:2.7.4")
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.io.ktor.client)
+    implementation(libs.androidx.lifecycle.compose.ktx)
+    implementation(libs.io.ktor.okhttp)
+    implementation(libs.androidx.navigation)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.ktx.serialization)
 
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
