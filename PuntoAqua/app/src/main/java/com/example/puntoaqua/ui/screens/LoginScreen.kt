@@ -25,33 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.example.puntoaqua.R
 import com.example.puntoaqua.ui.theme.PuntoAquaTheme
 
-/*
-@Composable
-fun LoginScreen(
-    username: String,
-
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-    ) {
-        LoginInputs(
-
-        )
-    }
-}
-
-LoginScreen(
-        username = viewModel.username,
-        onUserNameChange = { viewModel.updateUserName(it) },
-        password = viewModel.userpassword,
-        onPasswordChange = { viewModel.updatePassword(it) },
-        onLoginSubmit = { viewModel.submitLogin() },
-        modifier = Modifier
-            .fillMaxSize()
-    )
- */
-//TEST
 @Composable
 fun Login(
     username: String,
