@@ -24,6 +24,8 @@ class PointsViewModel(
 
     val promoState = mutableStateOf(false)
 
+    val errorState = mutableStateOf(false)
+
     fun updateIdTextField(newId: String) {
         uid = newId
     }
@@ -34,15 +36,21 @@ class PointsViewModel(
 
     fun updatePoints(uId: String, points: String) {
         viewModelScope.launch {
-            userDbRepository.updatePoints(uId, points)
-            val updatedUserInfo = userDbRepository.getUser(uid)
-            val decUser = Json.decodeFromString<Map<String,String?>>(updatedUserInfo)
-            val prize = decUser.get("Prize") ?: 0
-            if(prize == "1") {
-                promoState.value = true
+            try {
+                userDbRepository.updatePoints(uId, points)
+                val updatedUserInfo = userDbRepository.getUser(uid)
+                val decUser = Json.decodeFromString<Map<String,String?>>(updatedUserInfo)
+                val prize = decUser.get("Prize") ?: 0
+                if(prize == "1") {
+                    promoState.value = true
+                }
+                pointsCounter = ""
+                uid = ""
+            } catch(e: Exception) {
+                errorState.value = true
+                pointsCounter = ""
+                uid = ""
             }
-            pointsCounter = ""
-            uid = ""
         }
     }
 }

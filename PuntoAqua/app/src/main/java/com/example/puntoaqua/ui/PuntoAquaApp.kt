@@ -39,6 +39,7 @@ fun PuntoAquaApp(
     val loginState = remember { userViewModel.errorLogin }
     val promoState = remember { pointsViewModel.promoState }
     val userExist = remember { userDetailViewModel.userExist }
+    val errorState = remember { pointsViewModel.errorState }
 
     NavHost(
         navController = navController,
@@ -58,6 +59,23 @@ fun PuntoAquaApp(
                                     }
                                 ) {
                                     Text(text = "Confirmar")
+                                }
+                            }
+                        )
+                    }
+                }
+                when {
+                    errorState.value -> {
+                        AlertDialog(
+                            text = { Text(text = "Error") },
+                            onDismissRequest = { },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        errorState.value = false
+                                    }
+                                ) {
+                                    Text(text = "OK")
                                 }
                             }
                         )

@@ -85,7 +85,7 @@ class LoginViewModel(
                     token = ""
                 )
             } catch (e: Exception) {
-                /*HANDLE EXCEPTION*/
+                errorLogin.value = true
             }
         }
     }
