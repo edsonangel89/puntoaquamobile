@@ -51,16 +51,19 @@ class PuntoAquaViewModel(
                     val application = (this[APPLICATION_KEY] as PuntoAquaApplication)
                     val userDbRepository = application.container.userDbRepository
                     val userPreferencesRepository = application.localRepository
+                    /*val netState = application.netState*/
                     LoginViewModel(userDbRepository, userPreferencesRepository)
                 }
                 initializer {
                     val application = (this[APPLICATION_KEY] as PuntoAquaApplication)
                     val userDbRepository = application.container.userDbRepository
+                    /*val netState = application.netState*/
                     UserDetailViewModel(userDbRepository)
                 }
                 initializer {
                     val application = (this[APPLICATION_KEY] as PuntoAquaApplication)
                     val userDbRepository = application.container.userDbRepository
+                    /*val netState = application.netState*/
                     PointsViewModel(userDbRepository)
                 }
             }

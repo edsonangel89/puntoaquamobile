@@ -1,5 +1,7 @@
 package com.example.puntoaqua.ui
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
@@ -9,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.puntoaqua.data.ConnectivityState
 import com.example.puntoaqua.ui.screens.Login
 import com.example.puntoaqua.ui.screens.LoginViewModel
 import com.example.puntoaqua.ui.screens.PointsScreen
@@ -40,6 +44,7 @@ fun PuntoAquaApp(
     val promoState = remember { pointsViewModel.promoState }
     val userExist = remember { userDetailViewModel.userExist }
     val errorState = remember { pointsViewModel.errorState }
+    val context = LocalContext.current
 
     NavHost(
         navController = navController,
@@ -94,6 +99,7 @@ fun PuntoAquaApp(
                     navigateToUserDetails = { navController.navigate("userdetail") },
                     updatePoints =  { pointsViewModel.updatePoints(pointsViewModel.uid, pointsViewModel.pointsCounter) }
                 )
+                Toast.makeText(context, "TEST",Toast.LENGTH_SHORT).show()
             }
             else {
                 when {

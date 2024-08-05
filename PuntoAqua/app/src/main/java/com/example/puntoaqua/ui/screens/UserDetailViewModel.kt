@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.puntoaqua.data.ConnectivityState
 import com.example.puntoaqua.data.PuntoAquaUiState
 import com.example.puntoaqua.repositories.UserDbRepository
 import com.example.puntoaqua.repositories.UserStateRepository

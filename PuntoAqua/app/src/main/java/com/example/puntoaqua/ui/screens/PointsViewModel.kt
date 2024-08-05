@@ -1,10 +1,18 @@
 package com.example.puntoaqua.ui.screens
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.puntoaqua.data.ConnectivityState
 import com.example.puntoaqua.data.PuntoAquaUiState
 import com.example.puntoaqua.repositories.UserDbRepository
 import com.example.puntoaqua.repositories.UserStateRepository
